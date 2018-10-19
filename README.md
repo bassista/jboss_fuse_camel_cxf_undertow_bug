@@ -8,8 +8,8 @@ poc of bug on undeploing a war on wildfly/boss with camel subsystem - wrong cont
   * http://localhost:8080/ctx1/restapi/orders1/1 (server1 route endpoint)
   * http://localhost:8080/ctx2/restapi/orders2/1 (server2 route endpoint)
   * http://localhost:8080/ctx3/restapi/orders3/1 (server3 route endpoint)
-* re-deploy server3.war
-* re-deploy server2.war
+* replace server3.war
+* replace server2.war
 * try to call http://localhost:8080/ctx3/restapi/orders3/1 you'll get a 404 response
 * looking at logs you'll see that during undeploy of server2.war wrong context has been shoutdown on undertow side:
 
