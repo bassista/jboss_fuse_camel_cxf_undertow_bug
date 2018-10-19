@@ -1,17 +1,17 @@
 # jboss_fuse_camel_cxf_undertow_bug
 poc of bug on undeploing a war on wildfly/boss with camel subsystem - wrong context is undeployed
 
-1)compile project
-2)deploy the 3 wars into jboss eap fuse (or use wildfly with camel extention patch)
-3)reboot jboss
-4)you can verify that all services are up and running executing the following request in get:
+* compile the project or use provided wars
+* deploy the 3 wars into jboss eap 7.1 with fuse 7.0.0 patch (or use wildfly with camel extention patch)
+* reboot jboss
+* verify that all services are up and running executing the following GET
   * http://localhost:8080/ctx1/restapi/orders1/1
   * http://localhost:8080/ctx2/restapi/orders2/1
   * http://localhost:8080/ctx3/restapi/orders3/1
-4)re-deploy server3.war
-5)re-deploy server2.war
-6)try to call http://localhost:8080/ctx3/restapi/orders3/1 you'll get a 404 response
-5)looking at logs you'll see that during undeploy of server2.war wrong context has been shoutdown on undertow side:
+* re-deploy server3.war
+* re-deploy server2.war
+* try to call http://localhost:8080/ctx3/restapi/orders3/1 you'll get a 404 response
+* looking at logs you'll see that during undeploy of server2.war wrong context has been shoutdown on undertow side:
 
 org.jboss.as.repository - WFLYDR0001: Content added at location C:\jboss-eap-7.1\standalone\data\content\c9\1b1e31cf8a7a8f3900bc9216af0cf127238a73\content
 org.wildfly.extension.camel - Remove Camel endpoint: http://127.0.0.1:8080/app2
