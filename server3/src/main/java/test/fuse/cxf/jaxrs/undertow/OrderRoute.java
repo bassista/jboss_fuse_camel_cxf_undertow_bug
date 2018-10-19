@@ -1,42 +1,52 @@
 package test.fuse.cxf.jaxrs.undertow;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Produces;
-import javax.inject.Named;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
+
+import org.apache.camel.CamelContext;
 import org.apache.camel.builder.RouteBuilder;
 import org.apache.camel.cdi.ContextName;
+import org.apache.camel.component.cxf.jaxrs.BindingStyle;
+import org.apache.camel.component.cxf.jaxrs.CxfRsComponent;
+import org.apache.camel.component.cxf.jaxrs.CxfRsEndpoint;
 
 @ApplicationScoped
 @ContextName("server3-context")
 public class OrderRoute extends RouteBuilder {
+   
+  public CxfRsEndpoint restEndpoint(String endpointUri, Class<?> clazz, CamelContext context) {
+    final CxfRsEndpoint serviceEndpoint =
+        new CxfRsEndpoint(endpointUri, new CxfRsComponent(context));
+    serviceEndpoint.addResourceClass(clazz);
 
-    @Produces
-    @Named("jsonProvider")
-    public JacksonJsonProvider jsonProvider() {
-        return new JacksonJsonProvider();
-    }
+    serviceEndpoint.setBindingStyle(BindingStyle.SimpleConsumer);
+    List providers = new ArrayList<>();
+    providers.add(new JacksonJsonProvider());
+    serviceEndpoint.setProviders(providers);
 
-    @Override
-    public void configure() throws Exception {
-        // use CXF-RS to setup the REST web service using the resource class
-        // and use the simple binding style which is recommended to use
-        from("cxfrs:http://localhost:8080/ctx3?resourceClasses=test.fuse.cxf.jaxrs.undertow.RestOrderService&bindingStyle=SimpleConsumer&providers=#jsonProvider")
-            // call the route based on the operation invoked on the REST web service
-            .toD("direct:${header.operationName}");
+    serviceEndpoint.setBridgeErrorHandler(true);
+    serviceEndpoint.setLoggingFeatureEnabled(true);
+    serviceEndpoint.setSkipFaultLogging(false);
+    serviceEndpoint.setSynchronous(true);
 
-        // routes that implement the REST services
-        from("direct:createOrder")
-            .bean("orderService", "createOrder");
+    return serviceEndpoint;
+  }
 
-        from("direct:getOrder")
-            .bean("orderService", "getOrder(${header.id})");
+  @Override
+  public void configure() throws Exception {
+    // use CXF-RS to setup the REST web service using the resource class
+    // and use the simple binding style which is recommended to use
+	from(restEndpoint("http://0.0.0.0:80/ctx3/restapi",RestOrderService.class,getContext()))
+        // call the route based on the operation invoked on the REST web service
+        .toD("direct:${header.operationName}");
 
-        from("direct:updateOrder")
-            .bean("orderService", "updateOrder");
-
-        from("direct:cancelOrder")
-            .bean("orderService", "cancelOrder(${header.id})");
-    }
+    // routes that implement the REST services
+    from("direct:getOrder")
+        .bean("orderService", "getOrder(${header.id})");
+  }
+    
 }

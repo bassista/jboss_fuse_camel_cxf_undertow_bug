@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<jboss-deployment-structure xmlns="urn:jboss:deployment-structure:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <deployment> 
+
+    <dependencies>
+      <module name="org.apache.commons.beanutils"/>
+      <module name="org.apache.commons.codec"/>      
+      <module name="org.apache.commons.lang"/>           
+      <module name="org.javassist"/>                       
+      <module name="org.reflections"/>    
+      <module name="com.fasterxml.jackson.dataformat.yaml"/>      
+      <module name="com.fasterxml.jackson.core.jackson-databind"/>
+      <module name="com.google.guava"/>  
+    </dependencies>
+    
+  </deployment>
+</jboss-deployment-structure>

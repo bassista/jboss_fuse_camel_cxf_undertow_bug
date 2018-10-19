@@ -22,6 +22,7 @@
 			<property><name>deploy</name></property>
          </activation>
 	     <modules>
+           <module>base</module>
            <module>server1</module>
 		   <module>server2</module>
 		   <module>server3</module>
@@ -40,23 +41,14 @@
         <jboss.password>${env.JBOSS_PASSWORD}</jboss.password>     	
         <jboss.port>9990</jboss.port>       
         <jboss.username>${env.JBOSS_USERNAME}</jboss.username>	 
-        <linkXRef>false</linkXRef>           
 		<maven.compiler.source>${java.version}</maven.compiler.source>
 		<maven.compiler.target>${java.version}</maven.compiler.target>
 		<project.build.sourceEncoding>${encoding}</project.build.sourceEncoding>	
 		<project.reporting.outputEncoding>${encoding}</project.reporting.outputEncoding>
-        <skipITests>true</skipITests>	
 		<version.apache.camel>2.21.0.fuse-000077-redhat-1</version.apache.camel>
 		<version.cxfRsClient>3.1.13.redhat-1</version.cxfRsClient>	    
-		<version.junit>5.1.0</version.junit>
-		<version.junit.platform>1.1.0</version.junit.platform>	 
-		<version.jwt>3.4.0</version.jwt>	     
-		<version.mockito>1.10.19</version.mockito>	    
 		<version.restfuse>1.2.0</version.restfuse>  
-    	<version.swagger.oas3>2.0.2</version.swagger.oas3>		
 		<version.validationApi>1.1.0.Final</version.validationApi>	
-		<xrefLocation>${project.reporting.outputDirectory}/xref</xrefLocation>
-    	<xrefTestLocation>${project.reporting.outputDirectory}/xref-test</xrefTestLocation>			
 	</properties>
 
 	<dependencyManagement>
@@ -68,17 +60,6 @@
 				<type>pom</type>
 				<scope>import</scope>
 			</dependency>
-
-			<dependency>
-				<groupId>io.swagger.core.v3</groupId>
-				<artifactId>swagger-annotations</artifactId>
-				<version>${version.swagger.oas3}</version>
-			</dependency>
-		    <dependency>
-		      	<groupId>io.swagger.core.v3</groupId>
-		      	<artifactId>swagger-jaxrs2</artifactId>
-		      	<version>${version.swagger.oas3}</version>
-		    </dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -106,7 +87,6 @@
 			<url>http://origin-repository.jboss.org/nexus/content/groups/ea</url>
 		</repository>
 	</repositories>
-
 
 	<build>
 		<finalName>${project.artifactId}</finalName>
