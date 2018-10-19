@@ -13,6 +13,7 @@ poc of bug on undeploing a war on wildfly/boss with camel subsystem - wrong cont
 * try to call http://localhost:8080/ctx3/restapi/orders3/1 you'll get a 404 response
 * looking at logs you'll see that during undeploy of server2.war wrong context has been shoutdown on undertow side:
 
+<pre>
 org.jboss.as.repository - WFLYDR0001: Content added at location C:\jboss-eap-7.1\standalone\data\content\c9\1b1e31cf8a7a8f3900bc9216af0cf127238a73\content
 org.wildfly.extension.camel - Remove Camel endpoint: http://127.0.0.1:8080/app2
 org.wildfly.extension.undertow - WFLYUT0022: Unregistered web context: '/app2' from server 'default-server'
@@ -30,8 +31,9 @@ org.apache.camel.impl.DefaultCamelContext - Apache Camel 2.21.0.fuse-000112-redh
 org.apache.camel.impl.DefaultCamelContext - Apache Camel 2.21.0.fuse-000112-redhat-3 (CamelContext: server2-context) is shutdown in 0.010 seconds
 org.jboss.as.server.deployment - WFLYSRV0028: Stopped deployment server2.war (runtime-name: server2.war) in 104ms
 org.jboss.as.server.deployment - WFLYSRV0027: Starting deployment of "server2.war" (runtime-name: "server2.war")
+</pre>
 
 Here is the issue:
 
-org.wildfly.extension.camel - Remove Camel endpoint: http://127.0.0.1:8080/ctx3/restapi
-org.wildfly.extension.undertow - WFLYUT0022: Unregistered web context: '/ctx3/restapi' from server 'default-server'
+* org.wildfly.extension.camel - Remove Camel endpoint: http://127.0.0.1:8080/ctx3/restapi
+* org.wildfly.extension.undertow - WFLYUT0022: Unregistered web context: '/ctx3/restapi' from server 'default-server'
