@@ -5,9 +5,9 @@ poc of bug on undeploing a war on wildfly/boss with camel subsystem - wrong cont
 * deploy the 3 wars into jboss eap 7.1 with fuse 7.0.0 patch (or use wildfly with camel extention patch)
 * reboot jboss
 * verify that all services are up and running executing the following GET
-  * http://localhost:8080/ctx1/restapi/orders1/1
-  * http://localhost:8080/ctx2/restapi/orders2/1
-  * http://localhost:8080/ctx3/restapi/orders3/1
+  * http://localhost:8080/ctx1/restapi/orders1/1 (server1 route endpoint)
+  * http://localhost:8080/ctx2/restapi/orders2/1 (server2 route endpoint)
+  * http://localhost:8080/ctx3/restapi/orders3/1 (server3 route endpoint)
 * re-deploy server3.war
 * re-deploy server2.war
 * try to call http://localhost:8080/ctx3/restapi/orders3/1 you'll get a 404 response
@@ -37,3 +37,5 @@ Here is the issue:
 
 * org.wildfly.extension.camel - Remove Camel endpoint: http://127.0.0.1:8080/ctx3/restapi
 * org.wildfly.extension.undertow - WFLYUT0022: Unregistered web context: '/ctx3/restapi' from server 'default-server'
+
+Wrong camel endpoint and web context have been removed, ctx3 instead of ctx2. It' seams that the lasted deployed one is picked...  
